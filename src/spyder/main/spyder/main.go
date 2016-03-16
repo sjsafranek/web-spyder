@@ -75,7 +75,19 @@ func crawl(url string, ch chan string, chFinished chan bool) {
 
 func main() {
 	foundUrls := make(map[string]bool)
-	seedUrls := os.Args[1:]
+	// seedUrls := os.Args[1:]
+
+	// STEFAN STUFF
+	var seedUrls []string
+	baseUrl := "https://www.google.com/#q="
+	seedUrls = append(seedUrls, baseUrl)
+	seedSearches := os.Args[1:]
+	for i := range seedSearches {
+		seedUrls[0] += seedSearches[i] + "+"
+	}
+	seedUrls[0] = seedUrls[0][0 : len(seedUrls[0])-1]
+	fmt.Println(seedUrls[0])
+	// END
 
 	// Channels
 	chUrls := make(chan string)
@@ -97,9 +109,7 @@ func main() {
 	}
 
 	// We're done! Print the results...
-
 	fmt.Println("\nFound", len(foundUrls), "unique urls:\n")
-
 	for url := range foundUrls {
 		fmt.Println(" - " + url)
 	}
